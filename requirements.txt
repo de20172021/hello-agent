@@ -1,0 +1,22 @@
+# HelloAgent —— 本地智能体工作台
+# 安装（推荐使用 conda 环境 llm-run）：
+#   C:\Users\de201\.conda\envs\llm-run\python.exe -m pip install -r requirements.txt
+
+# --- Web 服务 ---
+fastapi>=0.115
+uvicorn[standard]>=0.30
+httpx>=0.27
+pydantic>=2.7
+
+# --- 本地推理（local_hf 提供方必需）---
+torch>=2.4
+transformers>=4.45
+accelerate>=0.34
+safetensors>=0.4
+
+# --- MCP 客户端（接入外部工具必需）---
+mcp>=2.0
+
+# --- 可选：从 ModelScope 拉取模型权重 ---
+modelscope>=1.20
+
