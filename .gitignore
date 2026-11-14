@@ -26,7 +26,11 @@ __pycache__/
 /schedules/*
 
 .venv/
+venv/
 *.log
+
+# start.bat 的解释器指针（本机路径，不入库）
+/.python-path
 
 # 系统/编辑器杂项
 .DS_Store

@@ -29,8 +29,26 @@ python -m pip install -r requirements.txt
 :: 2. 启动（默认 127.0.0.1:8765，自动打开浏览器）
 python run.py
 
-:: 或者直接双击 start.bat（自动查找 .venv 或 py 启动器）
+:: 或者直接双击 start.bat（自动挑一个装了依赖的解释器）
 ```
+
+`start.bat` 会按顺序探测，**并且要求候选解释器能 `import uvicorn, fastapi` 才采用**，
+所以系统里那个没装依赖的 base 解释器会被跳过，不会出现「找得到 python 但一跑就报错」：
+
+1. `%HELLOAGENT_PYTHON%` 环境变量（单次覆盖）
+2. 项目根目录的 `.python-path` 文件（一行写死解释器路径，已加入 .gitignore）
+3. `.venv\Scripts\python.exe` / `venv\Scripts\python.exe`
+4. 用户目录下的 conda / miniconda 环境（`~/.conda/envs/*`、`~/anaconda3/envs/*` 等）
+5. `py` 启动器、PATH 上的 `python`
+
+都没有时不会闪退，而是打印修复步骤并等你按键。想固定用某个环境（比如 conda 的 `llm-run`）：
+
+```bat
+echo C:\Users\你\.conda\envs\llm-run\python.exe> .python-path
+```
+
+> 注意：`start.bat` 必须是**纯 ASCII + CRLF** 换行。cmd 在 GBK 代码页下会把 UTF-8 中文注释行
+> 当成命令执行，还会因字节错位生成垃圾文件。`.gitattributes` 已强制 `*.bat` 为 CRLF。
 
 首次对话会自动加载 `models/` 下的模型（默认 Qwen3-0.6B，CPU 约 10 秒）。启动参数：
 
