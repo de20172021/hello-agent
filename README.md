@@ -32,6 +32,11 @@ python run.py
 :: 或者直接双击 start.bat（自动挑一个装了依赖的解释器）
 ```
 
+依赖分两组：`fastapi / uvicorn / httpx / pydantic` 是 Web 服务必需；
+`torch / transformers / accelerate / safetensors` 只给本地推理（`local_hf`）用。
+只用 LM Studio、Ollama 或其它 OpenAI 兼容端点的话，第二组可以不装（省 2–3GB），
+启动时「未检测到 torch」那句提示直接忽略即可。
+
 `start.bat` 会按顺序探测，**并且要求候选解释器能 `import uvicorn, fastapi` 才采用**，
 所以系统里那个没装依赖的 base 解释器会被跳过，不会出现「找得到 python 但一跑就报错」：
 
@@ -50,7 +55,10 @@ echo C:\Users\你\.conda\envs\llm-run\python.exe> .python-path
 > 注意：`start.bat` 必须是**纯 ASCII + CRLF** 换行。cmd 在 GBK 代码页下会把 UTF-8 中文注释行
 > 当成命令执行，还会因字节错位生成垃圾文件。`.gitattributes` 已强制 `*.bat` 为 CRLF。
 
-首次对话会自动加载 `models/` 下的模型（默认 Qwen3-0.6B，CPU 约 10 秒）。启动参数：
+`models/` 里的权重**不入库**（`.gitignore` 已忽略；实测 0.6B 约 1.5GB、1.7B 约 3.8GB），
+clone 下来是空目录。首次使用在「模型」面板的**模型库**里选来源（ModelScope / HF 镜像），
+搜 `Qwen/Qwen3-0.6B`、`Qwen/Qwen3-1.7B` 等仓库下载；也可以把自己下好的权重直接丢进 `models/`。
+下载完成后首次对话会自动加载（默认 Qwen3-0.6B，CPU 约 10 秒）。启动参数：
 
 | 参数 | 说明 |
 | --- | --- |
@@ -386,6 +394,15 @@ python examples/mcp_http_auth_server.py
 | 长期记忆 | `data/memory/MEMORY.md` |
 | 会话数据库 | `data/chat.db` |
 | 配置 | `data/config.json` |
+| 模型权重 | `models/`（不入库，需自行下载） |
+| 会话产物 | `workspace/`（不入库） |
+
+这些路径全部由 `app/settings.py` 的 `BASE_DIR = Path(__file__).resolve().parent.parent` 推导，
+**代码里没有硬编码的绝对路径**，整个目录搬到别的机器 / 别的用户名下都能直接跑。
+
+`.gitignore` 排除了本机数据，仓库里只有代码：`app/`、`web/`（含 vendor）、`scripts/`、`examples/`、
+`skills/*/SKILL.md`、`workspace/README.md` 以及根目录的 `run.py`、`requirements.txt`、`start.bat`。
+被排除的是 `data/`、`models/`、`workspace/`（除 README）、`skills/.seeded`、`.python-path`、`.idea/`、`.workbuddy/`。
 
 ## 代码结构
 
@@ -412,6 +429,10 @@ app/
   tools/           basic / files / meta 三组工具 + 异步注册表
 web/               原生 JS 前端（index.html / style.css / app.js）
 examples/          示例 MCP 服务
+scripts/           基准与自检脚本（bench_infer / bench_sweep / bench_turn / probe_cache / ui_check）
+skills/            技能库，每个技能一个 `SKILL.md`
+start.bat          Windows 启动器：挑一个真正装了依赖的解释器
+llm-tool.py        独立演示脚本：下载模型 + 直接跑一次带工具调用推理，不启动 Web 服务
 ```
 
 关键设计：**工具统一异步执行**（`aexecute`），同步内置工具丢线程池、MCP 工具走长连接；
@@ -421,7 +442,9 @@ examples/          示例 MCP 服务
 
 - 服务默认只监听 `127.0.0.1`；用 `--host 0.0.0.0` 暴露到局域网前请自行评估。
 - 文件访问被限制在当前工作目录内；命令执行有超时与危险命令拦截，但**不构成强隔离**。
-- `data/` 里存着对话与配置（含 API Key），不要提交到公开仓库（`.gitignore` 已忽略）。
+- `data/`（对话、`config.json`、`mcp.json` 里可能有密钥）、`models/`（权重，实测 5.3GB）、
+  `workspace/`（会话产物）、`.python-path`（本机解释器路径）都不要提交到公开仓库，
+  `.gitignore` 已全部忽略。推之前可以用 `git status --ignored` 复查一遍。
 
 ## 已知限制
 
