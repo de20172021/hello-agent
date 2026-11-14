@@ -1,6 +1,6 @@
 # HelloAgent —— 本地智能体工作台
-# 安装（推荐使用 conda 环境 llm-run）：
-#   C:\Users\de201\.conda\envs\llm-run\python.exe -m pip install -r requirements.txt
+# 安装（先激活环境，如 conda activate llm-run）：
+#   python -m pip install -r requirements.txt
 
 # --- Web 服务 ---
 fastapi>=0.115

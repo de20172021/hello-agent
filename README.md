@@ -23,13 +23,13 @@
 ## 快速开始
 
 ```bat
-:: 1. 安装依赖（使用你现有的 conda 环境）
-C:\Users\de201\.conda\envs\llm-run\python.exe -m pip install -r requirements.txt
+:: 1. 安装依赖（先激活你的环境，conda activate 你的环境名 / .venv\Scripts\activate）
+python -m pip install -r requirements.txt
 
 :: 2. 启动（默认 127.0.0.1:8765，自动打开浏览器）
-C:\Users\de201\.conda\envs\llm-run\python.exe run.py
+python run.py
 
-:: 或者直接双击 start.bat
+:: 或者直接双击 start.bat（自动查找 .venv 或 py 启动器）
 ```
 
 首次对话会自动加载 `models/` 下的模型（默认 Qwen3-0.6B，CPU 约 10 秒）。启动参数：
@@ -210,7 +210,7 @@ MCP（Model Context Protocol）服务连接后即可被模型调用（异步执�
     "filesystem": {
       "transport": "stdio",
       "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-filesystem", "D:/codefile/python/hello-agent/workspace"],
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "<项目绝对路径>/workspace"],
       "env": {"GITHUB_TOKEN": "${GITHUB_TOKEN}"},
       "enabled": true,
       "auto_start": true,

@@ -6,7 +6,7 @@
 在 HelloAgent 里添加 MCP 服务时填：
     服务名   demo
     命令     <你的 python.exe 绝对路径>
-    参数     D:/codefile/python/hello-agent/examples/mcp_echo_server.py
+    参数     <项目绝对路径>/examples/mcp_echo_server.py
 
 兼容 MCP SDK 1.x / 2.x。
 """
