@@ -69,6 +69,10 @@ clone 下来是空目录。首次使用在「模型」面板的**模型库**里�
 
 ## 界面速览
 
+| 浅色主题 | 暗色主题 |
+| --- | --- |
+| ![浅色主题主界面](docs/screenshots/main-light.png) | ![暗色主题主界面](docs/screenshots/main-dark.png) |
+
 - **输入框下方一排**：`模型`（点开切换，显示当前模型名）、`图片/文件`、
   `思考`（开关 + 轻度/标准/深入三档强度）、`技能`（勾选本轮启用的技能）。
   本地工具默认可用，不需要额外开关。
@@ -219,6 +223,9 @@ tags: [code, review]
 - 代码 / 文本 → 语法高亮；图片 → 直接显示；
 - 所有类型都能一键切「源码」、下载或新窗口打开。
 
+![工具调用卡片与本轮产物](docs/screenshots/artifacts.png)
+*工具调用卡片（参数、返回、耗时）与「📦 本轮产物」汇总，点卡片在右侧分屏预览*
+
 ### 6. MCP 接入
 
 MCP（Model Context Protocol）服务连接后即可被模型调用（异步执行，进程内长连接复用）。
@@ -327,6 +334,9 @@ python examples/mcp_http_auth_server.py
 
 「设置 → 性能」里可以开关、调额度、手动预热/清空，并看到命中率与累计省下的 token。
 
+![性能面板](docs/screenshots/kv-cache.png)
+*「设置 → 性能」：缓存额度、条目数、命中情况与累计省下的 token*
+
 关于**蒸馏**：那是训练侧的事（拿大模型的输出重新训一个小模型），对「已经在本机跑着的这个模型」
 推理没有帮助。真正能让这一台机器变快的是：前缀缓存（本次）、INT8 量化（设置里可开，约 1.2–1.7 倍）、
 少生成点 token（思考预算 / 最大回复长度）、以及别把上百个 MCP 工具塞进提示词。
@@ -342,6 +352,9 @@ python examples/mcp_http_auth_server.py
 - **逐轮明细**：一次用户提问算一轮，点击行展开该轮每一次生成（首字、tok/s、复用与实算）与每一次工具调用
   （成功与否、参数与返回的 token、返回内容预览、耗时）；
 - **工具排行**：每个工具被调用的次数、失败数、累计返回 token。
+
+![Token 用量面板](docs/screenshots/usage.png)
+*概览四卡 + 输入/输出构成条 + 可展开的逐轮明细与工具调用记录*
 
 口径说明（面板底部也写了）：
 
@@ -400,8 +413,9 @@ python examples/mcp_http_auth_server.py
 这些路径全部由 `app/settings.py` 的 `BASE_DIR = Path(__file__).resolve().parent.parent` 推导，
 **代码里没有硬编码的绝对路径**，整个目录搬到别的机器 / 别的用户名下都能直接跑。
 
-`.gitignore` 排除了本机数据，仓库里只有代码：`app/`、`web/`（含 vendor）、`scripts/`、`examples/`、
-`skills/*/SKILL.md`、`workspace/README.md` 以及根目录的 `run.py`、`requirements.txt`、`start.bat`。
+`.gitignore` 排除了本机数据，仓库里只有代码与文档：`app/`、`web/`（含 vendor）、`scripts/`、`examples/`、
+`skills/*/SKILL.md`、`docs/screenshots/`（README 用的截图）、`workspace/README.md` 以及根目录的
+`run.py`、`requirements.txt`、`start.bat`。
 被排除的是 `data/`、`models/`、`workspace/`（除 README）、`skills/.seeded`、`.python-path`、`.idea/`、`.workbuddy/`。
 
 ## 代码结构
@@ -429,6 +443,7 @@ app/
   tools/           basic / files / meta 三组工具 + 异步注册表
 web/               原生 JS 前端（index.html / style.css / app.js）
 examples/          示例 MCP 服务
+docs/screenshots/  README 用的界面截图
 scripts/           基准与自检脚本（bench_infer / bench_sweep / bench_turn / probe_cache / ui_check）
 skills/            技能库，每个技能一个 `SKILL.md`
 start.bat          Windows 启动器：挑一个真正装了依赖的解释器
