@@ -71,7 +71,7 @@ clone 下来是空目录。首次使用在「模型」面板的**模型库**里�
 
 | 浅色主题 | 暗色主题 |
 | --- | --- |
-| ![浅色主题主界面](docs/screenshots/main-light.png) | ![暗色主题主界面](docs/screenshots/main-dark.png) |
+| ![浅色主题主界面](docs/screenshots/ui-light.png) | ![暗色主题主界面](docs/screenshots/ui-dark.png) |
 
 - **输入框下方一排**：`模型`（点开切换，显示当前模型名）、`图片/文件`、
   `思考`（开关 + 轻度/标准/深入三档强度）、`技能`（勾选本轮启用的技能）。
@@ -223,7 +223,7 @@ tags: [code, review]
 - 代码 / 文本 → 语法高亮；图片 → 直接显示；
 - 所有类型都能一键切「源码」、下载或新窗口打开。
 
-![工具调用卡片与本轮产物](docs/screenshots/artifacts.png)
+![工具调用卡片与本轮产物](docs/screenshots/tool-cards.png)
 *工具调用卡片（参数、返回、耗时）与「📦 本轮产物」汇总，点卡片在右侧分屏预览*
 
 ### 6. MCP 接入
@@ -334,7 +334,7 @@ python examples/mcp_http_auth_server.py
 
 「设置 → 性能」里可以开关、调额度、手动预热/清空，并看到命中率与累计省下的 token。
 
-![性能面板](docs/screenshots/kv-cache.png)
+![性能面板](docs/screenshots/perf-panel.png)
 *「设置 → 性能」：缓存额度、条目数、命中情况与累计省下的 token*
 
 关于**蒸馏**：那是训练侧的事（拿大模型的输出重新训一个小模型），对「已经在本机跑着的这个模型」
@@ -353,7 +353,7 @@ python examples/mcp_http_auth_server.py
   （成功与否、参数与返回的 token、返回内容预览、耗时）；
 - **工具排行**：每个工具被调用的次数、失败数、累计返回 token。
 
-![Token 用量面板](docs/screenshots/usage.png)
+![Token 用量面板](docs/screenshots/token-usage.png)
 *概览四卡 + 输入/输出构成条 + 可展开的逐轮明细与工具调用记录*
 
 口径说明（面板底部也写了）：
